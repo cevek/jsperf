@@ -1,0 +1,19 @@
+<body>
+    <script src="./lib.js"></script>
+    <script>
+        function require() { return window }
+        function onError() {
+            alert(`Loading error: ${location.hash.substr(1)}.js`);
+        }
+        function onLoad() {
+            setTimeout(() => {
+                document.body.innerHTML = 'Done'
+            });
+        }
+        if (location.hash) {
+            document.write(`Working...<script src="./${location.hash.substr(1)}.js" onload="onLoad()" onerror="onError()"></sc${''}ript>`);
+        } else {
+            alert(`Set a js file path to url hash`);
+        }
+    </script>
+</body>
