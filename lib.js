@@ -1,14 +1,9 @@
 function main(global) {
     let MEASURE_NEED_CALL = false;
     let dumpCounter = 0;
+    const GC = typeof gc === 'function' ? gc : ()=>{};
     function measure(fn) {
         return MEASURE_NEED_CALL ? fn() : dumpCounter++;
-    }
-    function makeHot(body) {
-        MEASURE_NEED_CALL = false;
-        for (let i = 0; i < 100; i++) {
-            body();
-        }
     }
     function measureInit(times, body) {
         MEASURE_NEED_CALL = false;
@@ -46,7 +41,9 @@ function main(global) {
                 measureTest(1000, body);
                 measureInit(1000, body);
                 const initDur = measureInit(times, body);
+                GC();
                 const dur = measureTest(times, body) - initDur;
+                GC();
                 result[groupKey][subGroup.name || subGroupName] = Math.max(Math.round((dur * mult) / subTimes), 0);
             }
         }
@@ -55,6 +52,7 @@ function main(global) {
             console.log(`node: ${process.version}\nCPU: ${os.cpus()[0].model}`);
         }
         console.table(result);
+        console.log(result);
         if (!obj) eval('');
     }
 
