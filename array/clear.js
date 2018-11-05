@@ -9,7 +9,6 @@ for (let i = 0; i < 1e3; i++) {
 perf({
     'pop': [10, 50, 100, 1000].map(size => ({
         name: size,
-        times: 1e5,
         body() {
             var arr = objArray.slice(0, size);
             for (let i = 0; i < size; i++) measure(() => arr.pop());
@@ -17,7 +16,6 @@ perf({
     })),
     '.length': [10, 50, 100, 1000].map(size => ({
         name: size,
-        times: 1e6,
         body() {
             var arr = objArray.slice(0, size);
             measure(() => arr.length = 0);

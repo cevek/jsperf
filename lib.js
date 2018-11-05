@@ -28,22 +28,25 @@ function main(global) {
         measureTest(10, () => 1);
         measureInit(10, () => 2);
         for (const groupKey in obj) {
-            const group = obj[groupKey];
+            let group = obj[groupKey];
             result[groupKey] = {};
+            if (typeof group.body === 'function') group = { 1: group };
+            if (typeof group === 'function') group = { 1: { body: group } };
             for (const subGroupName in group) {
-                const subGroup = group[subGroupName];
-                const times = subGroup.times || 1e6;
+                let subGroup = group[subGroupName];
+                if (typeof subGroup === 'function') subGroup = { body: subGroup };
                 const subTimes = subGroup.subTimes || 1;
                 const body = subGroup.body;
-                const mult = 1e6 / times;
                 measureTest(10, body);
                 measureInit(10, body);
-                measureTest(1000, body);
                 measureInit(1000, body);
+                const time = measureTest(1000, body);
+                const times = subGroup.times || (time > 10 ? 1e4 : time > 1 ? 1e5 : 1e6);
+                const mult = 1e6 / times;
                 const initDur = measureInit(times, body);
                 GC();
                 const dur = measureTest(times, body) - initDur;
-                GC();
+                // GC();
                 result[groupKey][subGroup.name || subGroupName] = Math.max(Math.round((dur * mult) / subTimes), 0);
             }
         }
