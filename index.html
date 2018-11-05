@@ -1,3 +1,14 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width">
+    <style>
+        *{font-family: "Lucida Console", Monaco, monospace; font-size: 12px;}
+        table,td,th{border:1px solid black; border-collapse: collapse; padding: 4px 7px;}
+        th{font-weight:bold; text-align: left}
+        th+th,td+td{text-align: right}
+        td+td{color: blue}
+    </style>
+</head>
 <body>
     <script src="./lib.js"></script>
     <script>
@@ -5,15 +16,11 @@
         function onError() {
             alert(`Loading error: ${location.hash.substr(1)}.js`);
         }
-        function onLoad() {
-            setTimeout(() => {
-                document.body.innerHTML = 'Done'
-            });
-        }
         if (location.hash) {
-            document.write(`Working...<script src="./${location.hash.substr(1)}.js" onload="onLoad()" onerror="onError()"></sc${''}ript>`);
+            document.write(`Working...<script src="./${location.hash.substr(1)}.js" onerror="onError()"></sc${''}ript>`);
         } else {
             alert(`Set a js file path to url hash`);
         }
     </script>
 </body>
+</html>

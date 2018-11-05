@@ -117,6 +117,39 @@ perf({
         },
     },
 
+    classList: {
+        1: {
+            times: 1e5,
+            body() {
+                const dom = document.createElement('div');
+                measure(() => {
+                    dom.classList.add('foo');
+                });
+            },
+        },
+    },
+    classListRewrite: {
+        1: {
+            times: 1e5,
+            body() {
+                measure(() => {
+                    tempDiv.classList.add('foo');
+                });
+            },
+        },
+    },
+
+    getClassName: {
+        1: {
+            times: 1e5,
+            body() {
+                measure(() => {
+                    return tempDiv.className;
+                });
+            },
+        },
+    },
+
     cloneNode1: {
         1: {
             times: 1e5,
@@ -188,7 +221,7 @@ perf({
         1: {
             body() {
                 measure(() => {
-                    clone2.firstChild;
+                    return clone2.firstChild;
                 });
             },
         },
@@ -198,7 +231,7 @@ perf({
             body() {
                 const child = clone3.firstChild;
                 measure(() => {
-                    child.nextSibling;
+                    return child.nextSibling;
                 });
             },
         },

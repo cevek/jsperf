@@ -1,7 +1,7 @@
 function main(global) {
     let MEASURE_NEED_CALL = false;
     let dumpCounter = 0;
-    const GC = typeof gc === 'function' ? gc : ()=>{};
+    const GC = typeof gc === 'function' ? gc : () => {};
     function measure(fn) {
         return MEASURE_NEED_CALL ? fn() : dumpCounter++;
     }
@@ -53,6 +53,22 @@ function main(global) {
         }
         console.table(result);
         console.log(result);
+        if (typeof window !== 'undefined') {
+            const cols = new Set();
+            for (const key in result) for (const col in result[key]) cols.add(col);
+            let html = '<table><tr><th>Test</th>';
+            for (const col of cols) html += `<th>${col}</th>`;
+            html += '</tr>';
+            for (const key in result) {
+                html += `<tr><td>${key}</td>`;
+                for (const col of cols) {
+                    html += `<td>${result[key][col]}</td>`;
+                }
+                html += `</tr>`;
+            }
+            html += '</table>';
+            document.body.innerHTML = html;
+        }
         if (!obj) eval('');
     }
 
