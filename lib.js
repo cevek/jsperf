@@ -3,7 +3,7 @@ function main(global) {
     let dumpCounter = 0;
     const GC = typeof gc === 'function' ? gc : () => {};
     function measure(fn) {
-        return MEASURE_NEED_CALL ? fn() : dumpCounter++;
+        return MEASURE_NEED_CALL ? fn() : dumpCounter;
     }
     function measureInit(times, body) {
         MEASURE_NEED_CALL = false;
@@ -30,13 +30,14 @@ function main(global) {
         for (const groupKey in obj) {
             let group = obj[groupKey];
             result[groupKey] = {};
-            if (typeof group.body === 'function') group = { 1: group };
-            if (typeof group === 'function') group = { 1: { body: group } };
+            if (typeof group.body === 'function') group = { Result: group };
+            if (typeof group === 'function') group = { Resul: { body: group } };
             for (const subGroupName in group) {
                 let subGroup = group[subGroupName];
                 if (typeof subGroup === 'function') subGroup = { body: subGroup };
                 const subTimes = subGroup.subTimes || 1;
                 const body = subGroup.body;
+                dumpCounter++;
                 measureTest(10, body);
                 measureInit(10, body);
                 measureInit(1000, body);
