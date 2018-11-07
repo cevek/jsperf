@@ -2,11 +2,17 @@ const { perf, measure } = require('../lib');
 function fn(level) {
     return level > 1 ? fn(level - 1) : null;
 }
-function noop() {
+function fnCall(level) {
+    return level > 1 ? fnCall.call(null, level - 1) : null;
+}
 
+let applyLevel = 0;
+function fnApply() {
+    applyLevel--;
+    return applyLevel > 0 ? fnApply.apply(null, arguments) : null;
 }
 perf({
-    'fn': {
+    fn: {
         subTimes: 100,
         body() {
             measure(() => {
@@ -18,9 +24,7 @@ perf({
         subTimes: 100,
         body() {
             measure(() => {
-                for (let i = 0; i < 100; i++) {
-                    noop.call(null);
-                }
+                fnCall(100);
             });
         },
     },
@@ -28,9 +32,8 @@ perf({
         subTimes: 100,
         body() {
             measure(() => {
-                for (let i = 0; i < 100; i++) {
-                    noop.apply(null);
-                }
+                applyLevel = 100;
+                fnApply(100);
             });
         },
     },
