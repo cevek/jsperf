@@ -18,10 +18,11 @@ function main(global) {
     function measureTest(times, body) {
         MEASURE_NEED_CALL = true;
         const start = Date.now();
-        for (let i = 0; i < times; i++) {
-            body();
+        var res;
+        for (var i = 0; i < times; i++) {
+            res = body();
         }
-        return Date.now() - start;
+        return i === 128325723 ? res : Date.now() - start;
     }
     function perf(obj) {
         const result = {};
@@ -37,6 +38,7 @@ function main(global) {
                 if (typeof subGroup === 'function') subGroup = { body: subGroup };
                 const subTimes = subGroup.subTimes || 1;
                 const body = subGroup.body;
+                const direct = subGroup.direct;
                 dumpCounter++;
                 measureTest(10, body);
                 measureInit(10, body);
@@ -44,7 +46,7 @@ function main(global) {
                 const time = measureTest(1000, body);
                 const times = subGroup.times || (time > 10 ? 1e4 : time > 1 ? 1e5 : 1e6);
                 const mult = 1e6 / times;
-                const initDur = measureInit(times, body);
+                const initDur = direct ? 0 : measureInit(times, body);
                 GC();
                 const dur = measureTest(times, body) - initDur;
                 // GC();
