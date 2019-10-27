@@ -3,6 +3,7 @@ var str = "foobar todo";
 var str2 = "foo";
 var str2Codes = ["f".charCodeAt(0), "o".charCodeAt(0), "o".charCodeAt(0)];
 var str2Arr = ["f", "o", "o"];
+const regexp = /^foo/;
 let counter = 0;
 perf({
   substr: {
@@ -16,6 +17,20 @@ perf({
     body() {
       measure(() => {
         return str.substring(0, 3) === str2;
+      });
+    }
+  },
+  regexpTest: {
+    body() {
+      measure(() => {
+        return regexp.test(str);
+      });
+    }
+  },
+  regexpMatch: {
+    body() {
+      measure(() => {
+        return str.match(regexp)[0] === str;
       });
     }
   },

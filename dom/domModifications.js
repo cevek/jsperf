@@ -120,6 +120,28 @@ perf({
     });
   },
 
+  setDataAttrPropRewrite() {
+    measure(() => {
+        return tempDiv.dataset.foo = 'bar';
+      });
+  },
+  setDataAttrRewrite() {
+    measure(() => {
+        return tempDiv.setAttribute('data-foo', 'bar');
+      });
+  },
+
+  getDataAttrProp() {
+    measure(() => {
+        return tempDiv.dataset.foo;
+      });
+  },
+  getDataAttr() {
+    measure(() => {
+        return tempDiv.getAttribute('data-foo')
+      });
+  },
+
   cloneNode1() {
     measure(() => {
       const dom = clone1.cloneNode(true);
